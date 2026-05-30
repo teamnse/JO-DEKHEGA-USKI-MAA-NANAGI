@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MODX · premium edge · no neon</title>
+  <!-- goldman for display, rajdhani for clean UI — no neon, only gradient/glass -->
+  <link href="https://fonts.googleapis.com/css2?family=Goldman&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body {
+      background: transparent;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      font-family: 'Rajdhani', sans-serif;
+    }
+
+    /* --- mini trigger — no neon, pure refined gradient & subtle border --- */
+    #mini {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #1a1e2a, #0f1219);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      box-shadow: 0 10px 20px -8px rgba(0,0,0,0.8);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    #mini img {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 1px solid rgba(255,215,0,0.2); /* premium gold hint */
+    }
+
+    /* elegant breathing pulse – transparent shimmer, not neon */
+    .mini-pulse {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+      animation: softGlow 2.4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes softGlow {
+      0% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); background: radial-gradient(circle, rgba(220,180,80,0.15) 0%, transparent 80%); }
+      100% { opacity: 0.2; transform: scale(1); }
+    }
+
+    /* --- MAIN PANEL — absolutely no neon, premium dark glass + moving gradient border --- */
+    #main {
+      width: 280px;
+      background: rgba(18, 22, 30, 0.92);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 32px;
+      display: none;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(230, 200, 120, 0.2); /* subtle gold */
+      box-shadow: 0 30px 45px -20px black;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+
+    /* running gradient border (no neon, only rich gold/platinum) */
+    #main::before {
+      content: '';
+      position: absolute;
+      top: -2px; left: -2px; right: -2px; bottom: -2px;
+      background: linear-gradient(120deg, #d4af37, #c0a062, #b49450, #a27e3c, #d4af37);
+      background-size: 300% 300%;
+      border-radius: 34px;
+      z-index: -1;
+      animation: borderFlow 6s ease infinite;
+      opacity: 0.5;
+    }
+    @keyframes borderFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* --- HEADER with ✖️ animation (custom close) --- */
+    .header {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Goldman', cursive;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      color: #ece3cc;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      text-transform: uppercase;
+    }
+
+    /* close button with rich animation */
+    .close-btn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(20, 20, 30, 0.7);
+      padding: 6px 14px 6px 12px;
+      border-radius: 40px;
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    .close-btn:hover {
+      background: #2a2520;
+      border-color: #d4af37;
+      transform: scale(1.05);
+    }
+    .close-btn span {
+      font-size: 14px;
+      font-weight: bold;
+      color: #fffaec;
+      transition: transform 0.3s ease;
+    }
+    .close-btn .x-symbol {
+      display: inline-block;
+      font-size: 18px;
+      line-height: 1;
+      color: #d4af37;
+      animation: xPulse 2s infinite ease;
+    }
+    @keyframes xPulse {
+      0% { transform: scale(1); text-shadow: 0 0 2px rgba(212, 175, 55, 0.3); }
+      50% { transform: scale(1.2); text-shadow: 0 0 8px rgba(212, 175, 55, 0.5); }
+      100% { transform: scale(1); text-shadow: 0 0 2px rgba(212, 175, 55, 0.2); }
+    }
+
+    /* inner content — pure dark premium */
+    .inner {
+      padding: 20px 18px 22px;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* card blocks – rich dark, subtle gold borders */
+    .block {
+      background: rgba(10, 14, 19, 0.8);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 24px;
+      padding: 18px 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 16px -8px #00000080;
+    }
+
+    .steps-title {
+      font-family: 'Goldman', cursive;
+      font-size: 14px;
+      color: #d4af37;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      font-weight: 400;
+      border-left: 3px solid #d4af37;
+      padding-left: 10px;
+    }
+
+    .step-text {
+      color: #e0d9cc;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .step-text::before {
+      content: '◆';
+      color: #a3874c;
+      font-size: 10px;
+    }
+
+    /* result big display */
+    .res-text {
+      font-family: 'Goldman', cursive;
+      font-size: 44px;
+      color: #d4af37;
+      line-height: 1.1;
+      font-weight: 400;
+      text-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+      letter-spacing: -1px;
+    }
+
+    .period-tag {
+      background: #1e1c17;
+      color: #e0cd9a;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-block;
+      border: 1px solid #b49450;
+      margin-top: 12px;
+    }
+
+    /* primary button — premium metallic */
+    .btn {
+      width: 100%;
+      background: linear-gradient(165deg, #23201a, #16130f);
+      border: 1px solid #b49450;
+      color: #ffefcf;
+      font-family: 'Goldman', cursive;
+      font-size: 14px;
+      padding: 16px 8px;
+      border-radius: 60px;
+      font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 6px 12px -5px #000000cc;
+      margin-top: 10px;
+    }
+    .btn:hover {
+      background: #2f2a20;
+      border-color: #dbb86b;
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 20px -10px black;
+    }
+    .btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 3px 8px black;
+    }
+
+    /* running warning / marquee — premium without neon */
+    .warning-run {
+      background: #0b0e12;
+      border: 1px solid #a3874c;
+      padding: 10px 0;
+      margin: 15px 0 8px;
+      overflow: hidden;
+      border-radius: 60px;
+    }
+    .warning-run span {
+      display: inline-block;
+      color: #ecd28c;
+      font-weight: 600;
+      font-size: 10px;
+      text-transform: uppercase;
+      animation: scrollText 8s linear infinite;
+      padding-left: 30px;
+      font-family: 'Goldman', cursive;
+      letter-spacing: 1.5px;
+      white-space: nowrap;
+    }
+    @keyframes scrollText {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-45%); }
+    }
+
+    /* flat sophisticated divider */
+    .flat-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #d4af37, #b49450, #d4af37, transparent);
+      width: 100%;
+      margin: 8px 0 14px;
+      opacity: 0.4;
+    }
+
+    /* ring container — no neon, just metallic spinning rings */
+    .ring-container {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      margin: 10px auto;
+    }
+    .outer-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #b49450;
+      border-radius: 50%;
+      border-top-color: #ead2a2;
+      animation: spin 3s cubic-bezier(0.5, 0.1, 0.3, 1) infinite;
+      opacity: 0.9;
+    }
+    .inner-ring {
+      position: absolute;
+      top: 20%; left: 20%;
+      width: 60%;
+      height: 60%;
+      border: 2px solid #a3874c;
+      border-radius: 50%;
+      border-bottom-color: #dbb86b;
+      animation: spinRev 2.2s cubic-bezier(0.4, 0.2, 0.3, 1) infinite;
+      opacity: 0.9;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinRev {
+      0% { transform: rotate(360deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    /* extra premium micro details */
+    .vip-tag {
+      color: #a3874c;
+      font-size: 11px;
+      border-bottom: 1px dashed #b49450;
+      padding-bottom: 3px;
+      margin-bottom: 6px;
+    }
+
+    /* no neon anywhere */
+  </style>
+</head>
+<body>
+  <!-- mini launcher with refined animation -->
+  <div id="mini" onclick="openM()">
+    <div class="mini-pulse"></div>
+    <img src="https://i.ibb.co/8LSCwY8Y/cropped-circle-image.png" alt="modx">
+  </div>
+
+  <!-- main premium panel -->
+  <div id="main">
+    <div class="header">
+      <span>⛭ FINE · MODX</span>
+      <!-- ✖️ ANIMATED CLOSE BUTTON with pulse X (no neon, just premium feel) -->
+      <div class="close-btn" onclick="closeM()">
+        <span class="x-symbol">✖</span>
+        <span>CLOSE</span>
+      </div>
+    </div>
+    <div class="inner" id="content"></div>
+  </div>
+
+  <script>
+    // ---------- CORE LOGIC (identical behavior, UI stripped of neon) ----------
+    var balance = '0.00';
+    var state = 'waiting';
+    var results = {};
+
+    function getP() {
+      var d = new Date();
+      var y = d.getUTCFullYear();
+      var m = String(d.getUTCMonth() + 1).padStart(2, '0');
+      var day = String(d.getUTCDate()).padStart(2, '0');
+      var totalMin = d.getUTCHours() * 60 + d.getUTCMinutes();
+      return '' + y + m + day + '1000' + (10001 + totalMin);
+    }
+
+    function openM() {
+      document.getElementById('main').style.display = 'flex';
+      document.getElementById('mini').style.display = 'none';
+      if (typeof TeamBridge !== 'undefined' && TeamBridge.resizeView) {
+        TeamBridge.resizeView(300, 460);
+      }
+      render();
+    }
+
+    function closeM() {
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('mini').style.display = 'flex';
+      if (typeof TeamBridge !== 'undefined' && TeamBridge.resizeView) {
+        TeamBridge.resizeView(85, 85);
+      }
+    }
+
+    function route(r, bal) {
+      balance = bal;
+      if (state === 'scanning' || (state === 'result' && r === 'wingo')) return;
+      state = r;
+      render();
+    }
+
+    function render() {
+      var cont = document.getElementById('content');
+      var cleanBal = parseFloat(balance.replace(/[^0-9.-]+/g, ''));
+
+      // ----- REG state -----
+      if (state === 'reg') {
+        cont.innerHTML = `
+          <div class="block">
+            <div style="color:#d4af37; font-size:20px; font-family:Goldman; margin-bottom:10px;">⛔ REGISTER</div>
+            <p style="color:#ddd; font-size:13px;">create account & link</p>
+            <div class="warning-run"><span>⚜️ ACTION REQUIRED · REGISTER NOW ⚜️</span></div>
+          </div>
+          <div class="flat-line"></div>
+          <button class="btn" onclick="window.TeamBridge?.loadUrl?.('https://www.jaiclub17.com/#/register?invitationCode=21226101807')">⟡ LINK ACCOUNT ⟡</button>
+        `;
+      }
+      // ----- WAITING / DEPOSIT (if balance low) -----
+      else if (state === 'waiting' || (state === 'wingo' && cleanBal < 500)) {
+        cont.innerHTML = `
+          <div class="block">
+            <div class="steps-title">◈ PROCEDURE ◈</div>
+            <div class="step-text">DEPOSIT ₹500 minimum</div>
+            <div class="step-text">HIGHER FUNDS = BETTER LEVEL</div>
+            <div class="step-text">ATTACH BANK ACCOUNT</div>
+          </div>
+          <div class="flat-line"></div>
+          <button class="btn" onclick="window.TeamBridge?.loadUrl?.('https://www.jaiclub17.com/#/wallet/Recharge')">⚡ FUND WALLET ⚡</button>
+        `;
+      }
+      // ----- VIP READY (wingo) -----
+      else if (state === 'wingo') {
+        cont.innerHTML = `
+          <div class="block">
+            <div class="vip-tag">⚜️ VIP TIER ACTIVE</div>
+            <div style="color:#f0e3c4; font-size:34px; font-weight:bold; font-family:Goldman;">₹${balance}</div>
+          </div>
+          <button class="btn" onclick="start()">⚡ EXECUTE INJECTOR ⚡</button>
+        `;
+      }
+      // ----- SCANNING with spinning rings (premium metallic) – EVERY PREDICTION SHOWS THIS ANIMATION -----
+      else if (state === 'scanning') {
+        cont.innerHTML = `
+          <div class="block" style="display:flex; flex-direction:column; align-items:center;">
+            <div class="ring-container">
+              <div class="outer-ring"></div>
+              <div class="inner-ring"></div>
+            </div>
+            <p style="color:#d4af37; font-family:Goldman; font-size:12px; margin-top:10px;">ANALYZING FRAME</p>
+          </div>
+          <div class="flat-line"></div>
+          <div class="warning-run"><span>⋮⋮ SECURE LINK ⋮⋮ SYNCHRONISING ⋮⋮</span></div>
+        `;
+      }
+      // ----- RESULT -----
+      else if (state === 'result') {
+        var p = getP(); 
+        if (!results[p]) {
+          // fallback – normally result already set
+          results[p] = { n: 7, sz: 'BIG' };
+        }
+        var d = results[p];
+        cont.innerHTML = `
+          <div class="block">
+            <p style="color:#aa9f89; font-size:10px; letter-spacing:1px;">OUTCOME</p>
+            <h1 class="res-text">${d.sz} ${d.n}</h1>
+            <div class="period-tag">${p}</div>
+          </div>
+          <button class="btn" onclick="state='wingo';render()">⟳ NEW SCAN ⟳</button>
+        `;
+        if (typeof TeamBridge !== 'undefined' && TeamBridge.speak) {
+          TeamBridge.speak(d.sz + ' ' + d.n);
+        }
+      }
+    }
+
+    // start scanning – ALWAYS triggers animation for every prediction
+    function start() {
+      var cleanBal = parseFloat(balance.replace(/[^0-9.-]+/g, ''));
+      if (isNaN(cleanBal) || cleanBal < 500) {
+        // if balance low, just show wingo again
+        state = 'wingo';
+        render();
+        return;
+      }
+      var cp = getP();
+      // if we already have result for current period, directly show result? but spec says "every prediction show analyzing animation"
+      // so we will force animation even if we already have a result for that period? 
+      // According to instruction: "every prediction show analyzing animation and full html" meaning always animate then show result.
+      // So we ignore pre‑existing result and go scanning first.
+      // (but we store result after scan anyway)
+      state = 'scanning';
+      render();
+
+      setTimeout(function () {
+        var n = Math.floor(Math.random() * 10);
+        var sz = (n <= 4) ? 'SMALL' : 'BIG';
+        results[cp] = { n: n, sz: sz };
+        state = 'result';
+        render();
+      }, 3000);
+    }
+
+    // TeamBridge mock if needed
+    if (typeof window.TeamBridge === 'undefined') {
+      window.TeamBridge = {
+        resizeView: (w, h) => console.log(`resize: ${w}x${h}`),
+        speak: (msg) => console.log('speak:', msg),
+        loadUrl: (url) => { window.open(url, '_blank'); }
+      };
+    }
+
+    // demo: start with 'wingo' and balance 705, so user can click "execute" and see animation
+    balance = '705.00';
+    state = 'wingo';   // ready state
+
+    window.onload = function() {
+      document.getElementById('main').style.display = 'none';
+      document.getElementById('mini').style.display = 'flex';
+      // prefill some fake result for demonstration (optional, but we want fresh)
+      // results[getP()] = { n: 3, sz: 'SMALL' }; // not needed now, will generate random
+    };
+  </script>
+</body>
+</html>
